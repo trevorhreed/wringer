@@ -1,2 +1,2 @@
 # wringer
-An API testing tool
+Put your APIs through the wringer.
