@@ -46,16 +46,19 @@ wringer.test({
       return true;
     }
     
-    // You can also return another test to be run; this is how you nest tests.
-    return {
-      ref: wringer.ref(),
-      endpoint: "GET another/api",
-      expectOk: true
-    };
-    
     return response.json().then(function(json){
       // You can also return a promise, which will be resolved and the resolved value will be handled accordingly
-      return true;
+      if(json.length < 10) {
+        return false;
+      }
+      
+      // You can also return another test to be run; this is how you nest tests.
+      return {
+        ref: wringer.ref(),
+        endpoint: "GET another/api",
+        expectOk: true
+      };
+      
     });
   }
 });
