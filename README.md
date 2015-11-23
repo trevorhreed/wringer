@@ -18,7 +18,7 @@ Put your APIs through the wringer.
 
 ## Usage
 
-```
+```js
 wringer.init({
   verbose: true, // default is false
   baseUrl: "http://www.my-domain.com/api/v1/",
