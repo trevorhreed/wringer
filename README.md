@@ -3,9 +3,17 @@ Put your APIs through the wringer.
 
 ## Installation
 
-*NPM*
+**NPM**
 
-*Browser*
+```
+
+```
+
+**Browser**
+
+```
+
+```
 
 
 ## Usage
