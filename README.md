@@ -75,4 +75,5 @@ wringer.test({
 
 ## Notes
 
-**[tv4](https://github.com/geraintluff/tv4)**
+**[Tiny Validator 4](https://github.com/geraintluff/tv4)**
+Wringer uses Tiny Validator 4 (v1.2.7) for JSON schema validation. If you include `tv4` on the page, wringer will attempt to use that version instead, otherwise, it will use tv4 v1.2.7, which is included internally in the library.
