@@ -19,6 +19,7 @@ Put your APIs through the wringer.
 ## Usage
 
 ```js
+// Optional initialization
 wringer.init({
   verbose: true, // default is false
   baseUrl: "http://www.my-domain.com/api/v1/",
@@ -26,6 +27,13 @@ wringer.init({
   headers: { "Authorization": "123456789" } // headers to be used in every API request; can be overridden
 });
 
+// Simple
+wringer.test({
+  endpoint: "GET path/to/api",
+  expectOk: true
+});
+
+// Advanced
 wringer.test({
   ref: wringer.ref(),
   endpoint: "GET path/to/api",
