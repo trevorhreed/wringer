@@ -8,7 +8,6 @@ var wringer = require('./wringer.js'),
     if(width > 0) while(--width) text += ' ';
     return text;
   }
-
   var styles = {
     h1pass: function(){ return ' ' + makeFullWidth(this).bold.bgGreen },
     h1fail: function(){ return ' ' + makeFullWidth(this).bold.bgRed },
@@ -23,12 +22,13 @@ var wringer = require('./wringer.js'),
   }
   for(var key in styles) addStyle(key, styles[key]);
 }());
+
 function write(msg, pad){
   if(pad) while(pad--) msg = ' ' + msg;
   console.log(msg);
 }
 
-function fails(arr){
+function getFailCount(arr){
   var count = 0;
   for(var i=0; i < arr.length; i++){
     if(arr[i].type == 'FAIL') count++;
@@ -38,11 +38,11 @@ function fails(arr){
 
 function runner(tests, config){
   wringer.init(config);
-  console.log();
-  wringer.suite(tests).then(function(results){
+  wringer.test(tests).then(function(results){
+    console.log();
     for(var i=0; i < results.length; i++){
       var result = results[i];
-      title = result.endpoint + ' (tests: ' + result.count + ', failed: ' + fails(result.tests) + ') - ' + result.status;
+      title = result.endpoint + ' (tests: ' + result.count + ', failed: ' + getFailCount(result.tests) + ') - ' + result.status;
       title = result.status == 'OK' ? title.h1pass : title.h1fail;
       write(title);
       for(var k=0; k < result.tests.length; k++){
@@ -53,6 +53,10 @@ function runner(tests, config){
       }
       if(result.tests.length) console.log();
     }
+    console.log();
+  })
+  .catch(function(err){
+    console.log(err && err.message);
   });
 }
 

@@ -1,0 +1,33 @@
+{
+  "name": "wringer",
+  "version": "0.1.0",
+  "description": "Put your APIs through the wringer.",
+  "main": "./src/wringer.js",
+  "bin": {
+    "wringer": "./src/wringer-cli.js"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trevorhreed/wringer.git"
+  },
+  "keywords": [
+    "wringer",
+    "api",
+    "test",
+    "testing"
+  ],
+  "author": "Trevor Reed",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/trevorhreed/wringer/issues"
+  },
+  "homepage": "https://github.com/trevorhreed/wringer#readme",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "minimist": "^1.2.0",
+    "node-fetch": "^1.3.3"
+  }
+}

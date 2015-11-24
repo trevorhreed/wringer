@@ -1,69 +1,3 @@
-/*
-
-TODO:
-  - consider wrapping results in an object with an over all name/status
-  - angular wrapper
-  - make optional timeout
-
-
-
-
-
-results = {
-  'endpoint': [
-    {
-      test: '',
-      type: 'PASS/FAIL',
-      reasons: [
-        {
-          message: '',
-          expected: {},
-          actual: {}
-        }
-      ]
-    }
-  ]
-}
-
-core.init({
-  verbose: false,
-  baseUrl: '',
-  params: {},
-  headers: {}
-})
-
-core.test({
-  ref: 'name',
-  ref: '123',
-  endpoint: 'GET /some/url',
-  params: {},
-  body: {},
-  headers: {},
-  expectOk: true,
-  expectStatus: 200,
-  expectJson: {},
-  expectJsonSchema: {},
-  expectHeaders: [
-    {
-      name: 'string',
-      value: 'regex'
-    }
-  ],
-  expect: function(){
-    return {
-      // return true, false, or test case or a promise that resolves to one of those values; returning a test case will cause this expectation to be fulfilled
-      // NEW: return a string which will cause the expectation to fail and use the string value as the reason!
-    }
-  }
-});
-
-core.test({
-  endpoint: 'GET /some/url',
-  expectOk: true
-})
-
-*/
-
 (function(global, factory){
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
@@ -385,7 +319,7 @@ core.test({
       });
   }
 
-  function suite(_config){
+  function test(_config){
     var suitePromises = [],
         results = {};
 
@@ -426,11 +360,13 @@ core.test({
 
     function testCase(config){
       if(!isObject(_config)) {
-        throw new ERRO("Invalid test case object. Actual: '" + (typeof config) + "'.", config);
+        var err = new ERRO("Invalid test case object. Actual: '" + (typeof config) + "'.", config);
+        return Promise.reject(err);
       }
       config.ref = config.ref || config.endpoint;
       if(!config.endpoint) {
-        throw new ERRO("Invalid endpoint for test '" + config.ref + "'. Actual: '" + config.endpoint + "'.", config);
+        var err = new ERRO("Invalid endpoint for test '" + config.ref + "'.", config);
+        return Promise.reject(err);
       }
       var endpoint = config.endpoint,
           httpConfig = getHttpConfig(config),
@@ -468,34 +404,34 @@ core.test({
       }
       return Promise.all(testPromises);
     }
-    testRecusively(_config);
-
-    return Promise.all(suitePromises).then(function(){
-      if(asHash) return results;
-      var arr = [];
-      for(var key in results){
-        arr.push({
-          'endpoint': key,
-          'status': results[key].status,
-          'tests': results[key].tests,
-          'count': results[key].count
+    return testRecusively(_config).then(function(){
+      return Promise.all(suitePromises).then(function(){
+        if(asHash) return results;
+        var arr = [];
+        for(var key in results){
+          arr.push({
+            'endpoint': key,
+            'status': results[key].status,
+            'tests': results[key].tests,
+            'count': results[key].count
+          })
+        }
+        arr.sort(function(a, b){
+          var aep = parseEndpoint(a.endpoint),
+              bep = parseEndpoint(b.endpoint);
+          if(aep.url < bep.url) return -1;
+          if(aep.url > bep.url) return 1;
+          if(methodOrder[aep.method] < methodOrder[bep.method]) return -1;
+          if(methodOrder[aep.method] > methodOrder[bep.method]) return 1;
+          return 0;
         })
-      }
-      arr.sort(function(a, b){
-        var aep = parseEndpoint(a.endpoint),
-            bep = parseEndpoint(b.endpoint);
-        if(aep.url < bep.url) return -1;
-        if(aep.url > bep.url) return 1;
-        if(methodOrder[aep.method] < methodOrder[bep.method]) return -1;
-        if(methodOrder[aep.method] > methodOrder[bep.method]) return 1;
-        return 0;
-      })
-      return arr;
+        return arr;
+      });
     });
   }
 
   return {
-    suite: suite,
+    test: test,
     init: init,
     ref: ref
   }
