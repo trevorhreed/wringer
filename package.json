@@ -26,8 +26,8 @@
   },
   "homepage": "https://github.com/trevorhreed/wringer#readme",
   "dependencies": {
-    "colors": "^1.1.2",
-    "minimist": "^1.2.0",
-    "node-fetch": "^1.3.3"
+    "colors": "^1.4.0",
+    "minimist": "^1.2.5",
+    "node-fetch": "^2.6.1"
   }
 }
